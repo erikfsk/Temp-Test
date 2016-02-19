@@ -13,6 +13,16 @@ parser = argparse.ArgumentParser(
 )
 
 
+"""
+################################################
+COMMENT!!!
+
+default and save does the same at the moment...
+clear and outfile does not work as intended...
+txt alternativ have never been implemented...
+################################################
+"""
+
 #save data
 parser.add_argument("-d", "--default", help="default setup: Clear data from data.txt and save data to data.txt ",
                     action="store_true")

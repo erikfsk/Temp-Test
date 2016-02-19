@@ -13,10 +13,12 @@ This module provides the class LivePlot which can plot data from a serial device
 live.
 
 Tested on Ubuntu 15.10 with Arduino Uno.
+Tested on OS X 10.11.2 (15C50) with Arduino Uno
 
 @author: Sverre
 '''
 import re
+import time
 import serial
 import matplotlib.pyplot as plt
 import multiprocessing as mp
@@ -60,6 +62,7 @@ class LivePlot(mp.Process):
         self.stopping = mp.Event()
          
         # Initialize attributes
+        self.now = time.time()
         self.dec = dec
         self.ser = ser
         self.comp = comp
@@ -70,6 +73,7 @@ class LivePlot(mp.Process):
         self.save = save
         self.clear = clear
         self.clear_file = clear_file
+        self.time_list = []
 
 
         #--------------------------------------------
@@ -139,12 +143,15 @@ class LivePlot(mp.Process):
 
             data = self.comp(raw)
             self.values.append(data)
+
+            current_time = (time.time()-self.now)
+            self.time_list.append(current_time)
             
             # Display output
             if self.verb:
                 print 'read: %splot: %s' % (raw, data)
             if self.save is not None:
-                self.save_data(data)
+                self.save_data(current_time, data)
             #self.fig.clear()
             self.plot()
 
@@ -165,16 +172,16 @@ class LivePlot(mp.Process):
         if self.dec is not None:
             self.fig = plt.plot(self.values, self.dec)
         else:
-            self.fig = plt.plot(self.values)
+            self.fig = plt.plot(self.time_list, self.values)
         if self.prop is not None:
             plt.setp(self.fig, *self.prop)
         plt.draw()
     
-    def save_data(self, data):
+    def save_data(self,current_time , data):
         '''
         Saves the data to a file.
         
         @param data: The data to be saved.
         '''
-        self.save_file.write(str(data) + '\n')
+        self.save_file.write("%.2f" % current_time +", "+ str(data) + '\n')
         self.save_file.flush()
