@@ -52,7 +52,7 @@ OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(12, 11, 5, 4, 3, 7);
+LiquidCrystal lcd(10, 9, 5, 8, 3, 7);
 
 void setup() {
   // start serial port
@@ -100,6 +100,5 @@ void loop() {
   }
   
   lcd.print(sekunder-(60*minutter));
-  delay(200);
 }
   

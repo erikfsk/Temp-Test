@@ -35,7 +35,7 @@ class LivePlot(mp.Process):
     The thread can be closed with the method L{join()}.
     '''
     def __init__(self, ser, comp, dec=None, prop=None, save=None, clean=None, 
-                 cb=None, verb=False, clear=False, clear_file=None):
+                 cb=None, verb=False, clear=False, only_txt=False):
         '''
         @param ser: The serial device to communicate with.
         @type ser: Serial
@@ -72,22 +72,18 @@ class LivePlot(mp.Process):
         self.prop = prop
         self.save = save
         self.clear = clear
-        self.clear_file = clear_file
+        self.only_txt = only_txt
         self.time_list = []
 
 
         #--------------------------------------------
         if self.clear:
-            if self.clear_file != None:
-                self.save_file = open(clear_file, 'w')
-                self.save_file.close()
-            else:
-                self.save_file = open(save, 'w')
-                self.save_file.close()
+            self.save_file = open(save, 'w')
+            self.save_file.close()
         #--------------------------------------------
 
         if self.save is not None:
-            self.save_file = open(save, 'w+')
+            self.save_file = open(save, 'a')
         
         # Todo    
         if cb is not None:
@@ -102,10 +98,11 @@ class LivePlot(mp.Process):
         L{join()} is called or the script terminates.
         '''
         # Setup plot
-        plt.figure()
-        plt.ion()
-        plt.show()
-        plt.hold(False)
+        if self.only_txt == False:
+            plt.figure()
+            plt.ion()
+            plt.show()
+            plt.hold(False)
 
         #--------------------------------------------
         def contains_many_dots(var):
@@ -153,7 +150,8 @@ class LivePlot(mp.Process):
             if self.save is not None:
                 self.save_data(current_time, data)
             #self.fig.clear()
-            self.plot()
+            if self.only_txt == False:
+                self.plot()
 
     
     def join(self):

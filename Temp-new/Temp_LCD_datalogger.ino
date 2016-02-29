@@ -120,7 +120,7 @@ void loop() {
     dataFile.println(dataString);
     dataFile.close();
   }
-  
-  delay(200);
 }
+
+
 
