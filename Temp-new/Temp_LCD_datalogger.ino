@@ -117,6 +117,8 @@ void loop() {
   dataString += String(temp);
   // write data to file
   if (dataFile) {
+    dataFile.print(millis()/1000.0);
+    dataFile.print(", ");
     dataFile.println(dataString);
     dataFile.close();
   }
