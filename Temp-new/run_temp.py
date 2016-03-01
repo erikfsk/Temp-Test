@@ -12,22 +12,13 @@ parser = argparse.ArgumentParser(
     description="""UI for Temperature logging. Running this script without any args, will give a live plot and values in the terminal"""
 )
 
-
-"""
-################################################
-COMMENT!!!
-
-################################################
-"""
-
-
-parser.add_argument("-d", "--default", help="default setup: Clear data from data.txt and save data to data.txt ",
+parser.add_argument("-t", "--txt", help="only saving data to txt (NO PLOT). ",
                     action="store_true")
 
 parser.add_argument("-s", "--save", help="Save data to the data.txt file",
                     action="store_true")
 
-parser.add_argument("-t", "--txt", help="only saving data to txt (NO PLOT). ",
+parser.add_argument("-d", "--default", help="Clear data from data.txt and save data to data.txt ",
                     action="store_true")
 
 args = parser.parse_args()
